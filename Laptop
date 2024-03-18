@@ -1,0 +1,88 @@
+import java.util.*;
+
+public class Laptop {
+    private String brand;
+    private int ram;
+    private int storageSize;
+    private String os;
+    private String color;
+
+    public Laptop(String brand, int ram, int storageSize, String os, String color) {
+        this.brand = brand;
+        this.ram = ram;
+        this.storageSize = storageSize;
+        this.os = os;
+        this.color = color;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public int getRam() {
+        return ram;
+    }
+
+    public int getStorageSize() {
+        return storageSize;
+    }
+
+    public String getOs() {
+        return os;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public static void filterLaptops(Set<Laptop> laptops, Map<Integer, Object> filters) {
+        for (Laptop laptop : laptops) {
+            boolean meetsCriteria = true;
+            for (Map.Entry<Integer, Object> entry : filters.entrySet()) {
+                int criterion = entry.getKey();
+                Object value = entry.getValue();
+                switch (criterion) {
+                    case 1:
+                        if (laptop.getRam() < (int) value) {
+                            meetsCriteria = false;
+                        }
+                        break;
+                    case 2:
+                        if (laptop.getStorageSize() < (int) value) {
+                            meetsCriteria = false;
+                        }
+                        break;
+                    case 3:
+                        if (!laptop.getOs().equals(value)) {
+                            meetsCriteria = false;
+                        }
+                        break;
+                    case 4:
+                        if (!laptop.getColor().equals(value)) {
+                            meetsCriteria = false;
+                        }
+                        break;
+                    default:
+                        System.out.println("Invalid criterion!");
+                        return;
+                }
+            }
+            if (meetsCriteria) {
+                System.out.println(laptop.getBrand() + " meets the criteria.");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Set<Laptop> laptops = new HashSet<>();
+        laptops.add(new Laptop("Brand1", 8, 512, "Windows", "Silver"));
+        laptops.add(new Laptop("Brand2", 16, 1024, "MacOS", "Space Gray"));
+        
+        Map<Integer, Object> filters = new HashMap<>();
+        filters.put(1, 12); // Minimum RAM required
+        filters.put(2, 750); // Minimum Storage Size required
+        filters.put(3, "Windows"); // Required OS
+
+        filterLaptops(laptops, filters);
+    }
+}
